@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SeviAccesible – Rutas accesibles en Sevilla</title>
+  <meta name="description" content="Aplicación web progresiva gratuita para personas ciegas o con baja visión que desean explorar Sevilla de forma autónoma y segura." />
+
+  <!-- Manifest estático -->
+  <link rel="manifest" href="manifest.json" />
+
+  <!-- Íconos reales o placeholders -->
+  <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+  <link rel="icon" sizes="512x512" href="icon-512.png" />
+
+  <style>
+    /* === Mismo CSS que antes (pegado aquí) === */
+    :root {
+      --bg: #ffffff;
+      --text: #1a1a1a;
+      --primary: #1a56db;
+      --focus: #ffbf00;
+      --danger: #e53e3e;
+      --font-size: 1.125rem;
+      --font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .dark-mode {
+      --bg: #121212;
+      --text: #e0e0e0;
+      --primary: #60a5fa;
+    }
+
+    .high-contrast {
+      --bg: #000000;
+      --text: #ffff00;
+      --primary: #ffbf00;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 1rem;
+      font-size: var(--font-size);
+    }
+
+    h1, h2 {
+      font-weight: 700;
+      margin: 1.5rem 0 1rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    nav a {
+      padding: 0.75rem 1rem;
+      display: block;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 1.25rem;
+      font-weight: bold;
+    }
+
+    select, textarea, button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.25rem;
+      font-size: var(--font-size);
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid #999;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    *:focus {
+      outline: 3px solid var(--focus) !important;
+      outline-offset: 2px;
+    }
+
+    .sr-only {
+      position: absolute !important;
+      clip: rect(1px, 1px, 1px, 1px);
+      padding: 0 !important;
+      border: 0 !important;
+      height: 1px !important;
+      width: 1px !important;
+      overflow: hidden;
+    }
+
+    @media (min-width: 600px) {
+      body {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header role="banner">
+    <h1>SeviAccesible</h1>
+    <p class="sr-only">Rutas turísticas accesibles en Sevilla para personas con discapacidad visual</p>
+  </header>
+
+  <nav aria-label="Navegación principal">
+    <ul>
+      <li><a href="#rutas" id="btn-rutas">Explorar rutas</a></li>
+      <li><a href="#descargadas" id="btn-descargadas">Mis rutas descargadas</a></li>
+      <li><a href="#ajustes" id="btn-ajustes">Ajustes y preferencias</a></li>
+      <li><a href="#reportar" id="btn-reportar">Reportar un problema</a></li>
+    </ul>
+  </nav>
+
+  <main role="main">
+    <section id="rutas" tabindex="-1">
+      <h2>Rutas disponibles</h2>
+      <p>Selecciona una ruta para escuchar su resumen o descargarla para usar sin conexión.</p>
+      <ul id="lista-rutas" aria-live="polite"></ul>
+    </section>
+
+    <section id="descargadas" tabindex="-1">
+      <h2>Mis rutas descargadas</h2>
+      <p>Aquí verás las rutas que has guardado para usar sin internet.</p>
+      <ul id="lista-descargadas" aria-live="polite"></ul>
+    </section>
+
+    <section id="ajustes" tabindex="-1">
+      <h2>Ajustes y preferencias</h2>
+      <form id="formulario-ajustes" aria-label="Preferencias de accesibilidad">
+        <label for="tipo-discapacidad">Tipo de discapacidad visual</label>
+        <select id="tipo-discapacidad">
+          <option value="ceguera">Ceguera total</option>
+          <option value="baja-vision">Baja visión</option>
+        </select>
+
+        <label for="velocidad-voz">Velocidad de la voz</label>
+        <select id="velocidad-voz">
+          <option value="0.8">Lenta</option>
+          <option value="1.0" selected>Normal</option>
+          <option value="1.2">Rápida</option>
+        </select>
+
+        <label for="tema">Tema visual</label>
+        <select id="tema">
+          <option value="normal">Normal</option>
+          <option value="dark">Modo oscuro</option>
+          <option value="high-contrast">Alto contraste</option>
+        </select>
+
+        <label>
+          <input type="checkbox" id="feedback-haptico" />
+          Activar feedback háptico (vibración)
+        </label>
+      </form>
+    </section>
+
+    <section id="reportar" tabindex="-1">
+      <h2>Reportar un problema de accesibilidad</h2>
+      <p>Tu aporte ayuda a hacer Sevilla más inclusiva.</p>
+      <form id="formulario-reportar" aria-label="Reporte de accesibilidad">
+        <label for="tipo-problema">Tipo de problema</label>
+        <select id="tipo-problema">
+          <option value="obstaculo">Obstáculo en acera</option>
+          <option value="ascensor">Ascensor roto</option>
+          <option value="audio">Audio-guía no funciona</option>
+          <option value="otro">Otro</option>
+        </select>
+
+        <label for="comentario">Comentario (opcional)</label>
+        <textarea id="comentario" rows="3" placeholder="Describe el problema brevemente"></textarea>
+
+        <button type="submit">Enviar reporte</button>
+      </form>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <p>© 2025 SeviAccesible – Proyecto libre, sin publicidad, 100 % accesible.</p>
+    <p><a href="#" id="btn-privacidad">Política de privacidad (con audio)</a></p>
+  </footer>
+
+  <script>
+    const rutasDisponibles = [
+      {
+        id: 'casco',
+        nombre: 'Ruta del Casco Antiguo',
+        duracion: '2 horas',
+        accesibilidad: 2,
+        descargada: false,
+        descripcion: 'Recorrido por la Catedral, Giralda y Archivo de Indias. Suelo de adoquín irregular en Santa Cruz. Ideal con bastón. Poca señalización táctil.'
+      },
+      {
+        id: 'alcazar',
+        nombre: 'Ruta del Real Alcázar',
+        duracion: '1h 45m',
+        accesibilidad: 4,
+        descargada: false,
+        descripcion: 'Visita al Palacio Real y Parque de María Luisa. Caminos accesibles, guías podotáctiles en entrada, baños adaptados. Muy recomendada.'
+      }
+    ];
+
+    let rutas = JSON.parse(JSON.stringify(rutasDisponibles));
+
+    document.addEventListener('DOMContentLoaded', () => {
+      cargarAjustesGuardados();
+      renderizarRutas();
+      enlazarEventos();
+      // Registro del Service Worker físico
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+          .catch(console.warn);
+      }
+    });
+
+    function renderizarRutas() {
+      const contenedor = document.getElementById('lista-rutas');
+      contenedor.innerHTML = '';
+      rutas.forEach(r => {
+        const li = document.createElement('li');
+        li.className = 'route-card';
+        li.innerHTML = `
+          <h3>${r.nombre}</h3>
+          <p>Duración: ${r.duracion} • Accesibilidad: ${'★'.repeat(r.accesibilidad)}${'☆'.repeat(5 - r.accesibilidad)}</p>
+          <p>${r.descripcion}</p>
+          <button aria-label="Descargar ${r.nombre} para uso offline" onclick="descargar('${r.id}')">Descargar</button>
+          <button aria-label="Escuchar descripción de ${r.nombre}" onclick="hablar('${r.descripcion}')">Escuchar</button>
+        `;
+        contenedor.appendChild(li);
+      });
+      actualizarRutasDescargadas();
+    }
+
+    function actualizarRutasDescargadas() {
+      const contenedor = document.getElementById('lista-descargadas');
+      contenedor.innerHTML = '';
+      const descargadas = rutas.filter(r => r.descargada);
+      if (descargadas.length === 0) {
+        contenedor.innerHTML = '<li>No tienes rutas descargadas.</li>';
+        return;
+      }
+      descargadas.forEach(r => {
+        const li = document.createElement('li');
+        li.innerHTML = `<h3>${r.nombre}</h3><p>Disponible sin conexión.</p>`;
+        contenedor.appendChild(li);
+      });
+    }
+
+    function descargar(id) {
+      const ruta = rutas.find(r => r.id === id);
+      if (ruta) {
+        ruta.descargada = true;
+        renderizarRutas();
+        feedback(`Ruta ${ruta.nombre} descargada para uso offline.`);
+      }
+    }
+
+    function hablar(texto) {
+      if (!('speechSynthesis' in window)) {
+        feedback('Tu navegador no soporta síntesis de voz.');
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance(texto);
+      utterance.lang = 'es-ES';
+      utterance.rate = parseFloat(document.getElementById('velocidad-voz').value || '1.0');
+      speechSynthesis.speak(utterance);
+    }
+
+    function feedback(mensaje) {
+      hablar(mensaje);
+      if (document.getElementById('feedback-haptico').checked && navigator.vibrate) {
+        navigator.vibrate([100]);
+      }
+    }
+
+    function cargarAjustesGuardados() {
+      const ajustes = {
+        tema: 'normal',
+        'tipo-discapacidad': 'ceguera',
+        'velocidad-voz': '1.0',
+        'feedback-haptico': 'false'
+      };
+
+      try {
+        for (const key in ajustes) {
+          const guardado = sessionStorage.getItem(key);
+          if (guardado !== null) {
+            ajustes[key] = guardado;
+          }
+        }
+      } catch (e) { /* ignore */ }
+
+      document.getElementById('tema').value = ajustes.tema;
+      document.getElementById('tipo-discapacidad').value = ajustes['tipo-discapacidad'];
+      document.getElementById('velocidad-voz').value = ajustes['velocidad-voz'];
+      document.getElementById('feedback-haptico').checked = ajustes['feedback-haptico'] === 'true';
+
+      aplicarTema(ajustes.tema);
+    }
+
+    function guardarAjuste(key, valor) {
+      try {
+        sessionStorage.setItem(key, valor.toString());
+      } catch (e) { /* ignore */ }
+      if (key === 'tema') aplicarTema(valor);
+    }
+
+    function aplicarTema(tema) {
+      document.body.classList.remove('dark-mode', 'high-contrast');
+      if (tema === 'dark') document.body.classList.add('dark-mode');
+      if (tema === 'high-contrast') document.body.classList.add('high-contrast');
+    }
+
+    function enlazarEventos() {
+      document.getElementById('tema').addEventListener('change', e => guardarAjuste('tema', e.target.value));
+      document.getElementById('tipo-discapacidad').addEventListener('change', e => guardarAjuste('tipo-discapacidad', e.target.value));
+      document.getElementById('velocidad-voz').addEventListener('change', e => guardarAjuste('velocidad-voz', e.target.value));
+      document.getElementById('feedback-haptico').addEventListener('change', e => guardarAjuste('feedback-haptico', e.target.checked));
+
+      document.getElementById('formulario-reportar').addEventListener('submit', e => {
+        e.preventDefault();
+        feedback('Tu reporte ha sido enviado. Gracias por ayudar a mejorar Sevilla.');
+        e.target.reset();
+      });
+
+      document.getElementById('btn-privacidad').addEventListener('click', e => {
+        e.preventDefault();
+        hablar('Esta aplicación no recoge datos personales. Solo usa tu ubicación si inicias una ruta, y nunca la almacena.');
+      });
+    }
+
+    window.descargar = descargar;
+    window.hablar = hablar;
+  </script>
+</body>
+</html>
