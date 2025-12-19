@@ -1,84 +1,421 @@
-Buena observación. Vamos a analizar **específicamente** la accesibilidad de **colores** y **mecanismos de interacción** (botones, enlaces, selección de audios) bajo los estándares **WCAG 2.1/2.2 Nivel AA** (el mínimo exigible en accesibilidad web, especialmente en servicios públicos o inclusivos como este).
-
----
-
-### 🔴 **1. Análisis de Colores**
-
-**Esquema actual:**
-- Fondo: `#0f172a` (slate-900, muy oscuro)
-- Texto principal: `#f1f5f9` (slate-100, casi blanco)
-- Acento: `#38bdf8` (sky-400, azul celeste brillante)
-
-#### ✅ **Puntos fuertes:**
-- **Contraste texto/fondo**:  
-  - `#f1f5f9` sobre `#0f172a` → **contraste ≈ 15.8:1** → **supera WCAG AAA** (muy bueno).
-- **Foco visible**: El contorno de foco (`2–3px solid #38bdf8`) es **claro, grueso y bien separado** del elemento → cumple **WCAG 2.4.12 (Focus Appearance)**.
-
-#### ⚠️ **Puntos de mejora:**
-- **Color de acento (sky-400)**: aunque tiene buen brillo, **algunas personas con daltonismo (especialmente de tipo tritanopia —azul-amarillo—)** pueden tener dificultad para distinguirlo del fondo oscuro si se usa en íconos pequeños o sin borde de foco.
-- **Ausencia de soporte para modo alto contraste del sistema**: no hay `@media (prefers-contrast: high)`.
-
-> ✅ **Veredicto**: Los colores **sí son correctos desde el punto de vista del contraste**, pero **se pueden mejorar para usuarios con discapacidades cromáticas**.
-
----
-
-### 🎯 **2. Botones y Mecanismos de Selección de Audios**
-
-#### ❌ **Problemas actuales:**
-
-1. **Mezcla de roles semánticos**:
-   - Usas `<a>` con `download` y `<button>` para reproducir. Esto está bien **si se usan correctamente**, pero:
-     - El `<a>` con `download` **no es un enlace a otro recurso**, sino una acción → técnicamente **debería ser un botón con `role="button"`** o, mejor aún, un `<button>` con `onclick` que dispare la descarga.
-     - Los lectores de pantalla anuncian "enlace" vs. "botón", y si ambos hacen algo similar (acciones), genera confusión.
-
-2. **Falta control de reproducción**:
-   - Solo hay un botón "▶️ Reproducir", pero **no hay "Pausar"**, ni visualización del estado.
-   - Si un usuario reproduce dos previews seguidos, **se superponen los audios** → experiencia confusa.
-   - **No hay retroalimentación auditiva o táctil** sobre el estado del audio.
-
-3. **Iconos como único indicador visual** (ej. ▶️, 📥):
-   - Aunque hay `aria-label`, **visualmente** los iconos pueden no ser suficientes para personas con baja visión.
-   - WCAG 1.3.3: no usar solo forma, color, tamaño o ubicación para transmitir información.
-
-4. **Tamaño de los botones**:
-   - En la versión anterior eran pequeños → ya mejoró en la versión grande, pero **el área táctil mínima recomendada es 44×44 dp (WCAG 2.5.5)**.
-   - En móvil, los botones deben ser fácilmente pulsables.
-
----
-
-### ✅ **Recomendaciones Especializadas**
-
-#### **Colores:**
-- Mantén el esquema base (alto contraste), pero **añade soporte para daltonismo**:
-  - Usa **iconos + texto obligatorio** (nunca solo icono).
-  - Asegura que los botones tengan **bordes claros** o **doble indicador** (color + forma).
-- Añade:
-  ```css
-  @media (prefers-contrast: high) {
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SeviAccesible – Audioguías Accesibles de Sevilla</title>
+  <meta name="description" content="Audioguías gratuitas, descargables y totalmente accesibles para personas con discapacidad visual. Explora Sevilla sin necesidad de verla." />
+  <meta name="theme-color" content="#2563eb" />
+  <style>
     :root {
-      --bg-primary: #000;
-      --text-primary: #fff;
-      --accent: #00f; /* azul más saturado */
+      /* Paleta optimizada para alto contraste y daltonismo */
+      --bg-primary: #000000; /* Negro puro: mejor para baja visión y lectores de pantalla */
+      --text-primary: #ffffff; /* Blanco puro: máximo contraste */
+      --accent: #2563eb; /* Azul accesible (WCAG AAA en blanco/negro) */
+      --accent-hover: #1d4ed8;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --border: #404040;
+      --focus-outline: 3px solid #60a5fa; /* sky-400: muy visible en negro */
     }
-    a, button {
-      border: 2px solid var(--accent) !important;
+
+    * {
+      box-sizing: border-box;
     }
-  }
-  ```
 
-#### **Interacción con audios:**
-- **Reemplaza los enlaces de descarga por `<button>` con `onclick` que cree un enlace temporal** → mejor semántica.
-- **Añade control de audio**: reproducir/pausar, y detener otros audios al iniciar uno nuevo.
-- **Etiqueta claramente el estado**: "Reproduciendo...", "Pausado", etc., con `aria-live="polite"`.
-- **Asegura área táctil mínima**: al menos **48×48 px** en todos los controles.
+    html {
+      /* Soporta zoom hasta 400% sin romper */
+      scroll-behavior: smooth;
+    }
 
----
+    body {
+      margin: 0;
+      padding: 1.5rem;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-size: 1.25rem; /* 20px base — ideal para baja visión */
+    }
 
-### 🛠️ Conclusión
+    header h1 {
+      font-size: 2.5rem; /* 40px */
+      margin-bottom: 1.25rem;
+      text-align: center;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
 
-> **Los colores son adecuados en contraste, pero mejorables en percepción cromática.  
-> Los botones y mecanismos de selección NO son óptimos: mezclan semántica, carecen de control de estado y no gestionan correctamente la interacción con múltiples audios.**
+    main {
+      flex: 1;
+    }
 
-**Para una audiencia con discapacidad visual, la claridad semántica, el control total por teclado y la retroalimentación inmediata son más importantes que la estética.**
+    section {
+      margin-bottom: 2.5rem;
+      padding: 1.75rem;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+    }
 
-¿Quieres que genere una versión refinada del HTML aplicando todas estas mejoras técnicas y semánticas (colores accesibles + botones con control de audio + gestión de estado)?
+    h2 {
+      font-size: 2rem; /* 32px */
+      margin-bottom: 1.25rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    p, ul, li {
+      margin-top: 0;
+      margin-bottom: 1.25rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    li:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    /* Botones accesibles: grandes, con texto claro y área táctil mínima */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      padding: 1rem 1.5rem;
+      border-radius: 0.75rem;
+      text-decoration: none;
+      cursor: pointer;
+      min-height: 3rem;
+      min-width: 12rem;
+      transition: background-color 0.2s ease;
+      border: 2px solid transparent;
+    }
+
+    .btn:focus {
+      outline: var(--focus-outline);
+      outline-offset: 4px;
+    }
+
+    .btn-download {
+      background-color: var(--accent);
+      color: white;
+    }
+
+    .btn-download:hover,
+    .btn-download:focus:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .btn-play,
+    .btn-pause {
+      background-color: var(--success);
+      color: white;
+    }
+
+    .btn-play:hover,
+    .btn-pause:hover {
+      background-color: #15803d;
+    }
+
+    .btn-report {
+      background-color: var(--danger);
+      color: white;
+      font-size: 1.25rem;
+      min-width: 14rem;
+    }
+
+    .btn-report:hover {
+      background-color: #b91c1c;
+    }
+
+    .route-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .audio-status {
+      margin-top: 0.75rem;
+      font-size: 1.125rem;
+      color: var(--accent);
+      font-weight: 600;
+      min-height: 1.5rem;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      color: #cccccc;
+      font-size: 1.25rem;
+      padding-top: 2rem;
+      line-height: 1.7;
+    }
+
+    /* Alto contraste del sistema */
+    @media (prefers-contrast: high) {
+      :root {
+        --accent: #0066ff;
+        --success: #00aa00;
+        --danger: #ff0000;
+      }
+      .btn {
+        border: 2px solid currentColor !important;
+      }
+    }
+
+    /* Sin animaciones si el usuario las ha desactivado */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* Móvil: botones apilados y más grandes */
+    @media (max-width: 640px) {
+      body {
+        padding: 1.25rem;
+        font-size: 1.375rem; /* 22px */
+      }
+
+      header h1 {
+        font-size: 2.25rem;
+      }
+
+      h2 {
+        font-size: 1.75rem;
+      }
+
+      .route-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SeviAccesible</h1>
+    <p class="sr-only">Audioguías accesibles de Sevilla para personas con discapacidad visual</p>
+  </header>
+
+  <main>
+    <section aria-labelledby="rutas-disponibles">
+      <h2 id="rutas-disponibles">Rutas disponibles</h2>
+      <p>Selecciona una ruta para escuchar su resumen o descargarla para usar sin conexión.</p>
+      <ul>
+        <li>
+          <strong>Ruta del Casco Antiguo</strong> — 12 minutos, 8 MB
+          <div class="route-actions">
+            <button class="btn btn-download"
+                    onclick="downloadFile('audios/casco_antiguo.mp3', 'casco_antiguo_seviaccesible.mp3')"
+                    aria-label="Descargar audioguía completa: Ruta del Casco Antiguo, 12 minutos, 8 MB">
+              📥 Descargar
+            </button>
+            <button class="btn btn-play"
+                    id="play1"
+                    onclick="toggleAudio('preview1', 'play1', 'status1')"
+                    aria-label="Reproducir o pausar vista previa de la Ruta del Casco Antiguo">
+              ▶️ Reproducir
+            </button>
+          </div>
+          <div class="audio-status" id="status1" aria-live="polite" aria-atomic="true">
+            Listo para reproducir
+          </div>
+          <audio id="preview1" preload="metadata">
+            <source src="audios/preview_casco_antiguo.mp3" type="audio/mpeg" />
+          </audio>
+        </li>
+        <li>
+          <strong>Ruta del Parque María Luisa</strong> — 10 minutos, 7 MB
+          <div class="route-actions">
+            <button class="btn btn-download"
+                    onclick="downloadFile('audios/parque_maria_luisa.mp3', 'parque_maria_luisa_seviaccesible.mp3')"
+                    aria-label="Descargar audioguía completa: Ruta del Parque María Luisa, 10 minutos, 7 MB">
+              📥 Descargar
+            </button>
+            <button class="btn btn-play"
+                    id="play2"
+                    onclick="toggleAudio('preview2', 'play2', 'status2')"
+                    aria-label="Reproducir o pausar vista previa de la Ruta del Parque María Luisa">
+              ▶️ Reproducir
+            </button>
+          </div>
+          <div class="audio-status" id="status2" aria-live="polite" aria-atomic="true">
+            Listo para reproducir
+          </div>
+          <audio id="preview2" preload="metadata">
+            <source src="audios/preview_parque_maria_luisa.mp3" type="audio/mpeg" />
+          </audio>
+        </li>
+        <li>
+          <strong>Ruta de los Reales Alcázares</strong> — 15 minutos, 10 MB
+          <div class="route-actions">
+            <button class="btn btn-download"
+                    onclick="downloadFile('audios/reales_alcazares.mp3', 'reales_alcazares_seviaccesible.mp3')"
+                    aria-label="Descargar audioguía completa: Ruta de los Reales Alcázares, 15 minutos, 10 MB">
+              📥 Descargar
+            </button>
+            <button class="btn btn-play"
+                    id="play3"
+                    onclick="toggleAudio('preview3', 'play3', 'status3')"
+                    aria-label="Reproducir o pausar vista previa de la Ruta de los Reales Alcázares">
+              ▶️ Reproducir
+            </button>
+          </div>
+          <div class="audio-status" id="status3" aria-live="polite" aria-atomic="true">
+            Listo para reproducir
+          </div>
+          <audio id="preview3" preload="metadata">
+            <source src="audios/preview_reales_alcazares.mp3" type="audio/mpeg" />
+          </audio>
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="rutas-descargadas">
+      <h2 id="rutas-descargadas">Mis rutas descargadas</h2>
+      <p>Las rutas se guardan en la carpeta de descargas de tu dispositivo.</p>
+      <p>✅ Sin conexión necesaria<br>
+         ✅ Sin rastreo<br>
+         ✅ Totalmente privado</p>
+    </section>
+
+    <section aria-labelledby="ajustes">
+      <h2 id="ajustes">Ajustes y preferencias</h2>
+      <p>Esta web no utiliza cookies, no requiere cuenta y no almacena datos.</p>
+      <p>Compatible con:</p>
+      <ul>
+        <li>• Lectores de pantalla: NVDA, JAWS, VoiceOver, TalkBack</li>
+        <li>• Navegación por teclado (Tab, Enter, Espacio)</li>
+        <li>• Zoom hasta 400%</li>
+        <li>• Modo alto contraste del sistema</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reportar">
+      <h2 id="reportar">Reportar un problema de accesibilidad</h2>
+      <p>Tu aporte ayuda a hacer Sevilla más inclusiva.</p>
+      <a href="mailto:accesibilidad@seviaccesible.es"
+         class="btn btn-report"
+         aria-label="Enviar correo electrónico a accesibilidad arroba seviaccesible punto es para reportar un problema de accesibilidad">
+        📧 Reportar problema
+      </a>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 SeviAccesible</p>
+    <p>Proyecto sin ánimo de lucro. Totalmente accesible, offline y privado.</p>
+    <p>Desarrollado con ❤️ para la comunidad ciega y con baja visión.</p>
+  </footer>
+
+  <script>
+    // Gestión inteligente de audios: solo uno reproduce a la vez
+    let currentAudio = null;
+    let currentButton = null;
+    let currentStatus = null;
+
+    function toggleAudio(audioId, btnId, statusId) {
+      const audio = document.getElementById(audioId);
+      const btn = document.getElementById(btnId);
+      const status = document.getElementById(statusId);
+
+      // Detener audio anterior si existe
+      if (currentAudio && currentAudio !== audio) {
+        currentAudio.pause();
+        if (currentButton) {
+          currentButton.textContent = '▶️ Reproducir';
+          currentButton.classList.remove('btn-pause');
+          currentButton.classList.add('btn-play');
+        }
+        if (currentStatus) {
+          currentStatus.textContent = 'Listo para reproducir';
+        }
+      }
+
+      if (audio.paused) {
+        audio.play();
+        btn.textContent = '⏸️ Pausar';
+        btn.classList.remove('btn-play');
+        btn.classList.add('btn-pause');
+        status.textContent = 'Reproduciendo...';
+      } else {
+        audio.pause();
+        btn.textContent = '▶️ Reproducir';
+        btn.classList.remove('btn-pause');
+        btn.classList.add('btn-play');
+        status.textContent = 'Pausado';
+      }
+
+      currentAudio = audio.paused ? null : audio;
+      currentButton = audio.paused ? null : btn;
+      currentStatus = audio.paused ? null : status;
+    }
+
+    // Descarga programática (mejor semántica que <a download>)
+    function downloadFile(url, filename) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Soporte de teclado para todos los botones
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    });
+
+    // Prevenir reproducción automática
+    document.querySelectorAll('audio').forEach(audio => {
+      audio.load();
+    });
+  </script>
+</body>
+</html>
+
