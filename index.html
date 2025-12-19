@@ -8,42 +8,36 @@
   <meta name="theme-color" content="#2563eb" />
   <style>
     :root {
-      /* Paleta optimizada para alto contraste y daltonismo */
-      --bg-primary: #000000; /* Negro puro: mejor para baja visión y lectores de pantalla */
-      --text-primary: #ffffff; /* Blanco puro: máximo contraste */
-      --accent: #2563eb; /* Azul accesible (WCAG AAA en blanco/negro) */
+      --bg: #000000;
+      --text: #ffffff;
+      --accent: #2563eb;
       --accent-hover: #1d4ed8;
       --success: #16a34a;
       --danger: #dc2626;
       --border: #404040;
-      --focus-outline: 3px solid #60a5fa; /* sky-400: muy visible en negro */
+      --focus: 4px solid #60a5fa;
     }
 
     * {
       box-sizing: border-box;
     }
 
-    html {
-      /* Soporta zoom hasta 400% sin romper */
-      scroll-behavior: smooth;
-    }
-
     body {
       margin: 0;
       padding: 1.5rem;
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
+      background-color: var(--bg);
+      color: var(--text);
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       line-height: 1.8;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      font-size: 1.25rem; /* 20px base — ideal para baja visión */
+      font-size: 1.5rem; /* ¡24px! — Tamaño ideal para baja visión */
     }
 
     header h1 {
-      font-size: 2.5rem; /* 40px */
-      margin-bottom: 1.25rem;
+      font-size: 3rem; /* 48px */
+      margin: 1.5rem 0;
       text-align: center;
       font-weight: 800;
       letter-spacing: -0.5px;
@@ -55,21 +49,22 @@
 
     section {
       margin-bottom: 2.5rem;
-      padding: 1.75rem;
+      padding: 2rem;
       border: 1px solid var(--border);
-      border-radius: 1rem;
+      border-radius: 1.25rem;
     }
 
     h2 {
-      font-size: 2rem; /* 32px */
-      margin-bottom: 1.25rem;
+      font-size: 2.25rem; /* 36px */
+      margin-bottom: 1.5rem;
       color: var(--accent);
       font-weight: 700;
     }
 
     p, ul, li {
       margin-top: 0;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem; /* 24px */
     }
 
     ul {
@@ -78,8 +73,8 @@
     }
 
     li {
-      margin-bottom: 1.75rem;
-      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.75rem;
       border-bottom: 1px solid var(--border);
     }
 
@@ -89,26 +84,25 @@
       padding-bottom: 0;
     }
 
-    /* Botones accesibles: grandes, con texto claro y área táctil mínima */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.75rem;
-      font-size: 1.25rem;
-      font-weight: 600;
-      padding: 1rem 1.5rem;
-      border-radius: 0.75rem;
+      gap: 1rem;
+      font-size: 1.625rem; /* 26px */
+      font-weight: 700;
+      padding: 1.25rem 2rem;
+      border-radius: 1rem;
       text-decoration: none;
       cursor: pointer;
-      min-height: 3rem;
-      min-width: 12rem;
+      min-height: 4rem;
+      min-width: 16rem;
       transition: background-color 0.2s ease;
       border: 2px solid transparent;
     }
 
     .btn:focus {
-      outline: var(--focus-outline);
+      outline: var(--focus);
       outline-offset: 4px;
     }
 
@@ -118,7 +112,7 @@
     }
 
     .btn-download:hover,
-    .btn-download:focus:hover {
+    .btn-download:focus {
       background-color: var(--accent-hover);
     }
 
@@ -136,8 +130,7 @@
     .btn-report {
       background-color: var(--danger);
       color: white;
-      font-size: 1.25rem;
-      min-width: 14rem;
+      min-width: 18rem;
     }
 
     .btn-report:hover {
@@ -147,16 +140,16 @@
     .route-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 1.25rem;
-      margin-top: 1rem;
+      gap: 1.5rem;
+      margin-top: 1.25rem;
     }
 
     .audio-status {
-      margin-top: 0.75rem;
-      font-size: 1.125rem;
+      margin-top: 1rem;
+      font-size: 1.625rem;
       color: var(--accent);
-      font-weight: 600;
-      min-height: 1.5rem;
+      font-weight: 700;
+      min-height: 2rem;
     }
 
     .sr-only {
@@ -175,12 +168,11 @@
       margin-top: auto;
       text-align: center;
       color: #cccccc;
-      font-size: 1.25rem;
-      padding-top: 2rem;
-      line-height: 1.7;
+      font-size: 1.5rem;
+      padding: 2.5rem 0 1.5rem;
+      line-height: 1.8;
     }
 
-    /* Alto contraste del sistema */
     @media (prefers-contrast: high) {
       :root {
         --accent: #0066ff;
@@ -188,34 +180,33 @@
         --danger: #ff0000;
       }
       .btn {
-        border: 2px solid currentColor !important;
+        border: 3px solid currentColor !important;
       }
     }
 
-    /* Sin animaciones si el usuario las ha desactivado */
     @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
       * {
         animation: none !important;
         transition: none !important;
       }
     }
 
-    /* Móvil: botones apilados y más grandes */
     @media (max-width: 640px) {
       body {
         padding: 1.25rem;
-        font-size: 1.375rem; /* 22px */
+        font-size: 1.625rem; /* 26px en móvil */
       }
 
       header h1 {
-        font-size: 2.25rem;
+        font-size: 2.75rem; /* 44px */
       }
 
       h2 {
-        font-size: 1.75rem;
+        font-size: 2rem; /* 32px */
+      }
+
+      section {
+        padding: 1.75rem;
       }
 
       .route-actions {
@@ -225,8 +216,8 @@
 
       .btn {
         width: 100%;
-        text-align: center;
-        justify-content: center;
+        font-size: 1.75rem; /* 28px */
+        padding: 1.5rem;
       }
     }
   </style>
@@ -314,26 +305,26 @@
     <section aria-labelledby="rutas-descargadas">
       <h2 id="rutas-descargadas">Mis rutas descargadas</h2>
       <p>Las rutas se guardan en la carpeta de descargas de tu dispositivo.</p>
-      <p>✅ Sin conexión necesaria<br>
-         ✅ Sin rastreo<br>
+      <p>✅ Funciona sin internet<br>
+         ✅ Sin rastreo ni datos personales<br>
          ✅ Totalmente privado</p>
     </section>
 
     <section aria-labelledby="ajustes">
-      <h2 id="ajustes">Ajustes y preferencias</h2>
-      <p>Esta web no utiliza cookies, no requiere cuenta y no almacena datos.</p>
-      <p>Compatible con:</p>
+      <h2 id="ajustes">Ajustes y compatibilidad</h2>
+      <p>Esta web está diseñada para funcionar perfectamente con:</p>
       <ul>
         <li>• Lectores de pantalla: NVDA, JAWS, VoiceOver, TalkBack</li>
-        <li>• Navegación por teclado (Tab, Enter, Espacio)</li>
-        <li>• Zoom hasta 400%</li>
-        <li>• Modo alto contraste del sistema</li>
+        <li>• Navegación por teclado (Tab, Enter, Barra espaciadora)</li>
+        <li>• Zoom hasta el 400% sin romper el diseño</li>
+        <li>• Modo alto contraste del sistema operativo</li>
+        <li>• Sin necesidad de cuenta, cookies ni permisos</li>
       </ul>
     </section>
 
     <section aria-labelledby="reportar">
-      <h2 id="reportar">Reportar un problema de accesibilidad</h2>
-      <p>Tu aporte ayuda a hacer Sevilla más inclusiva.</p>
+      <h2 id="reportar">¿Encontraste un problema?</h2>
+      <p>Ayúdanos a mejorar. Tu retroalimentación hace Sevilla más inclusiva.</p>
       <a href="mailto:accesibilidad@seviaccesible.es"
          class="btn btn-report"
          aria-label="Enviar correo electrónico a accesibilidad arroba seviaccesible punto es para reportar un problema de accesibilidad">
@@ -344,12 +335,11 @@
 
   <footer>
     <p>© 2025 SeviAccesible</p>
-    <p>Proyecto sin ánimo de lucro. Totalmente accesible, offline y privado.</p>
+    <p>Proyecto sin ánimo de lucro. Totalmente accesible, offline y respetuoso con tu privacidad.</p>
     <p>Desarrollado con ❤️ para la comunidad ciega y con baja visión.</p>
   </footer>
 
   <script>
-    // Gestión inteligente de audios: solo uno reproduce a la vez
     let currentAudio = null;
     let currentButton = null;
     let currentStatus = null;
@@ -359,13 +349,11 @@
       const btn = document.getElementById(btnId);
       const status = document.getElementById(statusId);
 
-      // Detener audio anterior si existe
       if (currentAudio && currentAudio !== audio) {
         currentAudio.pause();
         if (currentButton) {
           currentButton.textContent = '▶️ Reproducir';
-          currentButton.classList.remove('btn-pause');
-          currentButton.classList.add('btn-play');
+          currentButton.classList.replace('btn-pause', 'btn-play');
         }
         if (currentStatus) {
           currentStatus.textContent = 'Listo para reproducir';
@@ -375,14 +363,12 @@
       if (audio.paused) {
         audio.play();
         btn.textContent = '⏸️ Pausar';
-        btn.classList.remove('btn-play');
-        btn.classList.add('btn-pause');
+        btn.classList.replace('btn-play', 'btn-pause');
         status.textContent = 'Reproduciendo...';
       } else {
         audio.pause();
         btn.textContent = '▶️ Reproducir';
-        btn.classList.remove('btn-pause');
-        btn.classList.add('btn-play');
+        btn.classList.replace('btn-pause', 'btn-play');
         status.textContent = 'Pausado';
       }
 
@@ -391,7 +377,6 @@
       currentStatus = audio.paused ? null : status;
     }
 
-    // Descarga programática (mejor semántica que <a download>)
     function downloadFile(url, filename) {
       const a = document.createElement('a');
       a.href = url;
@@ -401,7 +386,6 @@
       document.body.removeChild(a);
     }
 
-    // Soporte de teclado para todos los botones
     document.querySelectorAll('.btn').forEach(btn => {
       btn.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -411,7 +395,6 @@
       });
     });
 
-    // Prevenir reproducción automática
     document.querySelectorAll('audio').forEach(audio => {
       audio.load();
     });
