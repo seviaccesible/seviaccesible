@@ -32,7 +32,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      font-size: 1.5rem; /* ¡24px! — Tamaño ideal para baja visión */
+      font-size: 1.5rem; /* 24px */
     }
 
     header h1 {
@@ -64,7 +64,7 @@
     p, ul, li {
       margin-top: 0;
       margin-bottom: 1.5rem;
-      font-size: 1.5rem; /* 24px */
+      font-size: 1.5rem;
     }
 
     ul {
@@ -89,7 +89,7 @@
       align-items: center;
       justify-content: center;
       gap: 1rem;
-      font-size: 1.625rem; /* 26px */
+      font-size: 1.625rem;
       font-weight: 700;
       padding: 1.25rem 2rem;
       border-radius: 1rem;
@@ -104,6 +104,20 @@
     .btn:focus {
       outline: var(--focus);
       outline-offset: 4px;
+    }
+
+    .btn-app {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      font-size: 1.75rem; /* 28px — aún más grande para destacar */
+      min-width: 18rem;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-app:hover,
+    .btn-app:focus {
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+      transform: translateY(-2px);
     }
 
     .btn-download {
@@ -189,35 +203,43 @@
         animation: none !important;
         transition: none !important;
       }
+      .btn-app:hover {
+        transform: none;
+      }
     }
 
     @media (max-width: 640px) {
       body {
         padding: 1.25rem;
-        font-size: 1.625rem; /* 26px en móvil */
+        font-size: 1.625rem;
       }
 
       header h1 {
-        font-size: 2.75rem; /* 44px */
+        font-size: 2.75rem;
       }
 
       h2 {
-        font-size: 2rem; /* 32px */
+        font-size: 2rem;
       }
 
       section {
         padding: 1.75rem;
       }
 
-      .route-actions {
+      .route-actions,
+      .app-section .btn {
         flex-direction: column;
         align-items: stretch;
       }
 
       .btn {
         width: 100%;
-        font-size: 1.75rem; /* 28px */
+        font-size: 1.75rem;
         padding: 1.5rem;
+      }
+
+      .btn-app {
+        font-size: 2rem; /* 32px en móvil */
       }
     }
   </style>
@@ -229,6 +251,20 @@
   </header>
 
   <main>
+    <!-- NUEVA SECCIÓN: DESCARGA DE LA APP -->
+    <section aria-labelledby="descargar-app">
+      <h2 id="descargar-app">Descargar la app SeviAccesible</h2>
+      <p>Accede a todas las audioguías sin conexión, con navegación optimizada para personas ciegas y con baja visión.</p>
+      <a href="https://apps.apple.com/es/app/seviaccesible" 
+         class="btn btn-app"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="Descargar la aplicación SeviAccesible para iPhone y Android. Funciona sin internet y está optimizada para lectores de pantalla.">
+        📱 Descargar la app
+      </a>
+      <p><em>Disponible para iOS y Android. Totalmente gratuita, sin anuncios ni permisos innecesarios.</em></p>
+    </section>
+
     <section aria-labelledby="rutas-disponibles">
       <h2 id="rutas-disponibles">Rutas disponibles</h2>
       <p>Selecciona una ruta para escuchar su resumen o descargarla para usar sin conexión.</p>
