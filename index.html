@@ -5,13 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SeviAccesible – Audioguías Accesibles de Sevilla</title>
   <meta name="description" content="Audioguías gratuitas, descargables y totalmente accesibles para personas con discapacidad visual. Explora Sevilla sin necesidad de verla." />
+  <meta name="theme-color" content="#38bdf8" />
   <style>
     :root {
       --bg-primary: #0f172a; /* slate-900 */
       --text-primary: #f1f5f9; /* slate-100 */
       --accent: #38bdf8; /* sky-400 */
-      --focus-outline: 2px solid #38bdf8;
+      --focus-outline: 3px solid #38bdf8;
       --contrast-link: #f8fafc; /* slate-50 */
+      --danger: #f87171; /* red-400 */
     }
 
     * {
@@ -25,12 +27,19 @@
       color: var(--text-primary);
       font-family: system-ui, -apple-system, sans-serif;
       line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     header h1 {
       font-size: 1.8rem;
       margin-bottom: 1.5rem;
       text-align: center;
+    }
+
+    main {
+      flex: 1;
     }
 
     section {
@@ -52,8 +61,8 @@
     }
 
     li {
-      margin-bottom: 1rem;
-      padding-bottom: 0.75rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
       border-bottom: 1px dashed #475569;
     }
 
@@ -72,6 +81,7 @@
       cursor: pointer;
       font-size: 1.05rem;
       padding: 0.5rem 0;
+      transition: color 0.2s ease;
     }
 
     a:hover, button:hover {
@@ -81,6 +91,50 @@
     a:focus, button:focus {
       outline: var(--focus-outline);
       outline-offset: 3px;
+    }
+
+    .route-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .route-actions a, .route-actions button {
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      background-color: var(--accent);
+      color: var(--bg-primary);
+      font-weight: 600;
+    }
+
+    .route-actions a:hover, .route-actions button:hover {
+      background-color: #0ea5e9;
+      text-decoration: none;
+    }
+
+    .download-icon::before {
+      content: "📥 ";
+    }
+
+    .play-icon::before {
+      content: "▶️ ";
+    }
+
+    .report-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: var(--danger);
+      color: white !important;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      font-weight: 600;
+    }
+
+    .report-link:hover {
+      background-color: #ef4444;
+      text-decoration: none;
     }
 
     .sr-only {
@@ -95,11 +149,37 @@
       border: 0;
     }
 
+    footer {
+      margin-top: auto;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      padding-top: 1.5rem;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 1rem;
+      }
+
+      header h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+      }
+
+      .route-actions {
+        flex-direction: column;
       }
     }
   </style>
@@ -116,32 +196,59 @@
       <p>Selecciona una ruta para escuchar su resumen o descargarla para usar sin conexión.</p>
       <ul>
         <li>
-          <a href="audios/casco_antiguo.mp3" download="casco_antiguo_seviaccesible.mp3"
-             aria-label="Descargar audioguía: Ruta del Casco Antiguo, duración 12 minutos, formato MP3, tamaño 8 MB">
-            Ruta del Casco Antiguo (12 min)
-          </a>
-          <br />
-          <button aria-label="Reproducir vista previa de la Ruta del Casco Antiguo" 
-                  onclick="document.getElementById('preview1').play()">
-            ▶️ Reproducir vista previa
-          </button>
+          <strong>Ruta del Casco Antiguo</strong> (12 min, 8 MB)<br>
+          <span class="sr-only">Duración: 12 minutos. Tamaño del archivo: 8 megabytes.</span>
+          <div class="route-actions">
+            <a href="audios/casco_antiguo.mp3" download="casco_antiguo_seviaccesible.mp3" class="download-icon"
+               aria-label="Descargar audioguía: Ruta del Casco Antiguo, duración 12 minutos, formato MP3, tamaño 8 MB">
+              Descargar guía completa
+            </a>
+            <button class="play-icon"
+                    aria-label="Reproducir vista previa de la Ruta del Casco Antiguo"
+                    onclick="document.getElementById('preview1').play()">
+              Reproducir vista previa
+            </button>
+          </div>
           <audio id="preview1" preload="none">
             <source src="audios/preview_casco_antiguo.mp3" type="audio/mpeg" />
             Tu navegador no soporta audio.
           </audio>
         </li>
         <li>
-          <a href="audios/parque_maria_luisa.mp3" download="parque_maria_luisa_seviaccesible.mp3"
-             aria-label="Descargar audioguía: Ruta del Parque María Luisa, duración 10 minutos, formato MP3, tamaño 7 MB">
-            Ruta del Parque María Luisa (10 min)
-          </a>
-          <br />
-          <button aria-label="Reproducir vista previa de la Ruta del Parque María Luisa"
-                  onclick="document.getElementById('preview2').play()">
-            ▶️ Reproducir vista previa
-          </button>
+          <strong>Ruta del Parque María Luisa</strong> (10 min, 7 MB)<br>
+          <span class="sr-only">Duración: 10 minutos. Tamaño del archivo: 7 megabytes.</span>
+          <div class="route-actions">
+            <a href="audios/parque_maria_luisa.mp3" download="parque_maria_luisa_seviaccesible.mp3" class="download-icon"
+               aria-label="Descargar audioguía: Ruta del Parque María Luisa, duración 10 minutos, formato MP3, tamaño 7 MB">
+              Descargar guía completa
+            </a>
+            <button class="play-icon"
+                    aria-label="Reproducir vista previa de la Ruta del Parque María Luisa"
+                    onclick="document.getElementById('preview2').play()">
+              Reproducir vista previa
+            </button>
+          </div>
           <audio id="preview2" preload="none">
             <source src="audios/preview_parque_maria_luisa.mp3" type="audio/mpeg" />
+            Tu navegador no soporta audio.
+          </audio>
+        </li>
+        <li>
+          <strong>Ruta de los Reales Alcázares</strong> (15 min, 10 MB)<br>
+          <span class="sr-only">Duración: 15 minutos. Tamaño del archivo: 10 megabytes.</span>
+          <div class="route-actions">
+            <a href="audios/reales_alcazares.mp3" download="reales_alcazares_seviaccesible.mp3" class="download-icon"
+               aria-label="Descargar audioguía: Ruta de los Reales Alcázares, duración 15 minutos, formato MP3, tamaño 10 MB">
+              Descargar guía completa
+            </a>
+            <button class="play-icon"
+                    aria-label="Reproducir vista previa de la Ruta de los Reales Alcázares"
+                    onclick="document.getElementById('preview3').play()">
+              Reproducir vista previa
+            </button>
+          </div>
+          <audio id="preview3" preload="none">
+            <source src="audios/preview_reales_alcazares.mp3" type="audio/mpeg" />
             Tu navegador no soporta audio.
           </audio>
         </li>
@@ -152,26 +259,47 @@
       <h2 id="rutas-descargadas">Mis rutas descargadas</h2>
       <p>Aquí verás las rutas que has guardado para usar sin internet.</p>
       <p><em>Las rutas descargadas se guardan en tu dispositivo. Accede a ellas desde la carpeta de descargas.</em></p>
+      <p>Esta web no almacena datos en el navegador ni requiere conexión permanente.</p>
     </section>
 
     <section aria-labelledby="ajustes">
       <h2 id="ajustes">Ajustes y preferencias</h2>
-      <p>Actualmente, no hay ajustes adicionales. Esta web no requiere cookies ni cuenta de usuario.</p>
+      <p>Esta aplicación no requiere cookies, cuenta de usuario ni datos personales.</p>
+      <p>Es completamente offline, privada y compatible con lectores de pantalla.</p>
+      <p><strong>Consejo:</strong> Puedes añadir esta página a tu pantalla de inicio para acceder fácilmente.</p>
     </section>
 
     <section aria-labelledby="reportar">
       <h2 id="reportar">Reportar un problema de accesibilidad</h2>
       <p>Tu aporte ayuda a hacer Sevilla más inclusiva.</p>
-      <a href="mailto:accesibilidad@seviaccesible.es"
-         aria-label="Enviar correo electrónico a accesibilidad arroba seviaccesible punto es">
+      <a href="mailto:accesibilidad@seviaccesible.es" class="report-link"
+         aria-label="Enviar correo electrónico a accesibilidad arroba seviaccesible punto es para reportar un problema de accesibilidad">
         📧 Reportar un problema
       </a>
     </section>
   </main>
 
-  <footer style="margin-top: 2rem; text-align: center; color: #94a3b8; font-size: 0.9rem;">
+  <footer>
     <p>© 2025 SeviAccesible. Proyecto sin ánimo de lucro. Totalmente accesible, offline y privado.</p>
+    <p>Desarrollado con ❤️ para la comunidad de personas con discapacidad visual.</p>
   </footer>
+
+  <script>
+    // Agregar mejor manejo de teclado para los botones de audio
+    document.querySelectorAll('button[onclick]').forEach(button => {
+      button.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          button.click();
+        }
+      });
+    });
+
+    // Asegurar que los audios no se descarguen automáticamente
+    document.querySelectorAll('audio').forEach(audio => {
+      audio.load();
+    });
+  </script>
 </body>
 </html>
 
