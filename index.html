@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SeviAccesible – Audioguías Accesibles de Sevilla</title>
-  <meta name="description" content="Audioguías gratuitas, descargables y totalmente accesibles para personas con discapacidad visual. Explora Sevilla sin necesidad de verla." />
+  <title>SeviAccesible – Audios Accesibles de Sevilla</title>
+  <meta name="description" content="Audios gratuitos, descargables y totalmente accesibles para personas con discapacidad visual. Descubre los tesoros de Sevilla con tus oídos." />
   <meta name="theme-color" content="#2563eb" />
   <style>
     :root {
@@ -16,6 +16,7 @@
       --danger: #dc2626;
       --border: #404040;
       --focus: 4px solid #60a5fa;
+      --yellow: #ffff00;
     }
 
     * {
@@ -32,11 +33,11 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      font-size: 1.5rem; /* 24px */
+      font-size: 1.5rem;
     }
 
     header h1 {
-      font-size: 3rem; /* 48px */
+      font-size: 3rem;
       margin: 1.5rem 0;
       text-align: center;
       font-weight: 800;
@@ -54,17 +55,23 @@
       border-radius: 1.25rem;
     }
 
-    /* ✅ Títulos <h2> ahora en AMARILLO */
     h2 {
-      font-size: 2.25rem; /* 36px */
+      font-size: 2.25rem;
       margin-bottom: 1.5rem;
-      color: #ffff00; /* AMARILLO brillante */
+      color: var(--yellow);
+      font-weight: 700;
+    }
+
+    h3 {
+      font-size: 1.875rem;
+      margin: 1.5rem 0 1rem;
+      color: var(--yellow);
       font-weight: 700;
     }
 
     p, ul, li {
       margin-top: 0;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       font-size: 1.5rem;
     }
 
@@ -83,6 +90,13 @@
       border-bottom: none;
       margin-bottom: 0;
       padding-bottom: 0;
+    }
+
+    .category {
+      background-color: rgba(64, 64, 64, 0.3);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
     }
 
     .btn {
@@ -105,20 +119,6 @@
     .btn:focus {
       outline: var(--focus);
       outline-offset: 4px;
-    }
-
-    .btn-app {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      color: white;
-      font-size: 1.75rem; /* 28px — aún más grande para destacar */
-      min-width: 18rem;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-    }
-
-    .btn-app:hover,
-    .btn-app:focus {
-      background: linear-gradient(135deg, #1d4ed8, #1e40af);
-      transform: translateY(-2px);
     }
 
     .btn-download {
@@ -152,18 +152,17 @@
       background-color: #b91c1c;
     }
 
-    .route-actions {
+    .audio-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 1.5rem;
       margin-top: 1.25rem;
     }
 
-    /* ✅ Estado del audio (ej. "Listo para reproducir") ahora en AMARILLO */
     .audio-status {
       margin-top: 1rem;
       font-size: 1.625rem;
-      color: #ffff00; /* AMARILLO */
+      color: var(--yellow);
       font-weight: 700;
       min-height: 2rem;
     }
@@ -178,6 +177,13 @@
       clip: rect(0, 0, 0, 0);
       white-space: nowrap;
       border: 0;
+    }
+
+    .intro-text {
+      background-color: rgba(37, 99, 235, 0.1);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border-left: 4px solid var(--accent);
     }
 
     footer {
@@ -205,9 +211,6 @@
         animation: none !important;
         transition: none !important;
       }
-      .btn-app:hover {
-        transform: none;
-      }
     }
 
     @media (max-width: 640px) {
@@ -224,12 +227,16 @@
         font-size: 2rem;
       }
 
+      h3 {
+        font-size: 1.75rem;
+      }
+
       section {
         padding: 1.75rem;
       }
 
-      .route-actions,
-      .app-section .btn {
+      .audio-actions,
+      .btn {
         flex-direction: column;
         align-items: stretch;
       }
@@ -239,110 +246,179 @@
         font-size: 1.75rem;
         padding: 1.5rem;
       }
-
-      .btn-app {
-        font-size: 2rem; /* 32px en móvil */
-      }
     }
   </style>
 </head>
 <body>
   <header>
     <h1>SeviAccesible</h1>
-    <p class="sr-only">Audioguías accesibles de Sevilla para personas con discapacidad visual</p>
+    <p class="sr-only">Audios accesibles de Sevilla para personas con discapacidad visual</p>
   </header>
 
   <main>
-    <!-- NUEVA SECCIÓN: DESCARGA DE LA APP -->
-    <section aria-labelledby="descargar-app">
-      <h2 id="descargar-app">Descargar la app SeviAccesible</h2>
-      <p>Accede a todas las audioguías sin conexión, con navegación optimizada para personas ciegas y con baja visión.</p>
-      <a href="https://apps.apple.com/es/app/seviaccesible" 
-         class="btn btn-app"
-         target="_blank"
-         rel="noopener noreferrer"
-         aria-label="Descargar la aplicación SeviAccesible para iPhone y Android. Funciona sin internet y está optimizada para lectores de pantalla.">
-        📱 Descargar la app
-      </a>
-      <p><em>Disponible para iOS y Android. Totalmente gratuita, sin anuncios ni permisos innecesarios.</em></p>
+    <section aria-labelledby="intro-audios">
+      <h2 id="intro-audios">Descubre Sevilla con tus oídos</h2>
+      <div class="intro-text">
+        <p>Te ofrecemos audios gratuitos y descargables que describen de forma rica, sensorial y autónoma los lugares más emblemáticos de Sevilla. Cada ubicación incluye recursos específicos dentro del lugar para que explores a tu ritmo.</p>
+        <p>🎯 Audios independientes y temáticos<br>
+           🎧 Escúchalos en cualquier momento<br>
+           🌍 Totalmente accesible para personas ciegas o con baja visión</p>
+      </div>
     </section>
 
-    <section aria-labelledby="rutas-disponibles">
-      <h2 id="rutas-disponibles">Rutas disponibles</h2>
-      <p>Selecciona una ruta para escuchar su resumen o descargarla para usar sin conexión.</p>
-      <ul>
-        <li>
-          <strong>Ruta del Casco Antiguo</strong> — 12 minutos, 8 MB
-          <div class="route-actions">
-            <button class="btn btn-download"
-                    onclick="downloadFile('audios/casco_antiguo.mp3', 'casco_antiguo_seviaccesible.mp3')"
-                    aria-label="Descargar audioguía completa: Ruta del Casco Antiguo, 12 minutos, 8 MB">
-              📥 Descargar
-            </button>
-            <button class="btn btn-play"
-                    id="play1"
-                    onclick="toggleAudio('preview1', 'play1', 'status1')"
-                    aria-label="Reproducir o pausar vista previa de la Ruta del Casco Antiguo">
-              ▶️ Reproducir
-            </button>
-          </div>
-          <div class="audio-status" id="status1" aria-live="polite" aria-atomic="true">
-            Listo para reproducir
-          </div>
-          <audio id="preview1" preload="metadata">
-            <source src="audios/preview_casco_antiguo.mp3" type="audio/mpeg" />
-          </audio>
-        </li>
-        <li>
-          <strong>Ruta del Parque María Luisa</strong> — 10 minutos, 7 MB
-          <div class="route-actions">
-            <button class="btn btn-download"
-                    onclick="downloadFile('https://41230041.servicio-online.net/sevhelena/wp-content/uploads/2025/12/cascoantiguo.mp3', 'parque_maria_luisa_seviaccesible.mp3')"
-                    aria-label="Descargar audioguía completa: Ruta del Parque María Luisa, 10 minutos, 7 MB">
-              📥 Descargar
-            </button>
-            <button class="btn btn-play"
-                    id="play2"
-                    onclick="toggleAudio('preview2', 'play2', 'status2')"
-                    aria-label="Reproducir o pausar vista previa de la Ruta del Parque María Luisa">
-              ▶️ Reproducir
-            </button>
-          </div>
-          <div class="audio-status" id="status2" aria-live="polite" aria-atomic="true">
-            Listo para reproducir
-          </div>
-          <audio id="preview2" preload="metadata">
-            <source src="https://41230041.servicio-online.net/sevhelena/wp-content/uploads/2025/12/cascoantiguo.mp3" type="audio/mpeg" />
-          </audio>
-        </li>
-        <li>
-          <strong>Ruta de los Reales Alcázares</strong> — 15 minutos, 10 MB
-          <div class="route-actions">
-            <button class="btn btn-download"
-                    onclick="downloadFile('audios/reales_alcazares.mp3', 'reales_alcazares_seviaccesible.mp3')"
-                    aria-label="Descargar audioguía completa: Ruta de los Reales Alcázares, 15 minutos, 10 MB">
-              📥 Descargar
-            </button>
-            <button class="btn btn-play"
-                    id="play3"
-                    onclick="toggleAudio('preview3', 'play3', 'status3')"
-                    aria-label="Reproducir o pausar vista previa de la Ruta de los Reales Alcázares">
-              ▶️ Reproducir
-            </button>
-          </div>
-          <div class="audio-status" id="status3" aria-live="polite" aria-atomic="true">
-            Listo para reproducir
-          </div>
-          <audio id="preview3" preload="metadata">
-            <source src="audios/preview_reales_alcazares.mp3" type="audio/mpeg" />
-          </audio>
-        </li>
-      </ul>
+    <section aria-labelledby="casco-antiguo">
+      <h2 id="casco-antiguo">Casco Antiguo de Sevilla</h2>
+      <p>El corazón histórico de Sevilla, con calles estrechas, patios escondidos y tesoros arquitectónicos que cobran vida a través del sonido.</p>
+      
+      <div class="category" aria-labelledby="catedral-casco">
+        <h3 id="catedral-casco">Catedral de Sevilla</h3>
+        <p>La catedral gótica más grande del mundo, con su famosa Giralda y la tumba de Cristóbal Colón. Descubre sus sonidos, ecos y secretos arquitectónicos.</p>
+        <div class="audio-actions">
+          <button class="btn btn-play" id="play1" onclick="toggleAudio('audio1', 'play1', 'status1')" aria-label="Reproducir audio: Catedral de Sevilla, 8 minutos">
+            ▶️ Escuchar
+          </button>
+          <button class="btn btn-download" onclick="downloadFile('audios/catedral.mp3', 'catedral_seviaccesible.mp3')" aria-label="Descargar audio: Catedral de Sevilla">
+            📥 Descargar
+          </button>
+        </div>
+        <div class="audio-status" id="status1" aria-live="polite" aria-atomic="true">Listo para reproducir</div>
+        <audio id="audio1" preload="metadata"><source src="audios/catedral.mp3" type="audio/mpeg" /></audio>
+      </div>
+
+      <div class="category" aria-labelledby="giralda-casco">
+        <h3 id="giralda-casco">La Giralda</h3>
+        <p>La antigua torre almohade convertida en campanario. Escucha los sonidos del viento en lo alto y la historia de sus 35 rampas.</p>
+        <div class="audio-actions">
+          <button class="btn btn-play" id="play2" onclick="toggleAudio('audio2', 'play2', 'status2')" aria-label="Reproducir audio: La Giralda, 6 minutos">
+            ▶️ Escuchar
+          </button>
+          <button class="btn btn-download" onclick="downloadFile('audios/giralda.mp3', 'giralda_seviaccesible.mp3')" aria-label="Descargar audio: La Giralda">
+            📥 Descargar
+          </button>
+        </div>
+        <div class="audio-status" id="status2" aria-live="polite" aria-atomic="true">Listo para reproducir</div>
+        <audio id="audio2" preload="metadata"><source src="audios/giralda.mp3" type="audio/mpeg" /></audio>
+      </div>
+
+      <div class="category" aria-labelledby="archivo-casco">
+        <h3 id="archivo-casco">Archivo de Indias</h3>
+        <p>El edificio que guarda los secretos del imperio español en América. Escucha las historias que contienen sus documentos y su arquitectura renacentista.</p>
+        <div class="audio-actions">
+          <button class="btn btn-play" id="play3" onclick="toggleAudio('audio3', 'play3', 'status3')" aria-label="Reproducir audio: Archivo de Indias, 7 minutos">
+            ▶️ Escuchar
+          </button>
+          <button class="btn btn-download" onclick="downloadFile('audios/archivo_indias.mp3', 'archivo_indias_seviaccesible.mp3')" aria-label="Descargar audio: Archivo de Indias">
+            📥 Descargar
+          </button>
+        </div>
+        <div class="audio-status" id="status3" aria-live="polite" aria-atomic="true">Listo para reproducir</div>
+        <audio id="audio3" preload="metadata"><source src="audios/archivo_indias.mp3" type="audio/mpeg" /></audio>
+      </div>
     </section>
 
-    <section aria-labelledby="rutas-descargadas">
-      <h2 id="rutas-descargadas">Mis rutas descargadas</h2>
-      <p>Aquí verás las rutas que has guardado para usar sin internet.</p>
+    <section aria-labelledby="real-alcazar">
+      <h2 id="real-alcazar">Real Alcázar de Sevilla</h2>
+      <p>Palacio real más antiguo de Europa aún en uso, con una mezcla única de arquitectura islámica y cristiana, jardines perfumados y fuentes cantarinas.</p>
+      
+      <div class="category" aria-labelledby="patios-alcazar">
+        <h3 id="patios-alcazar">Patios y Salas Reales</h3>
+        <p>Los patios con azulejos, fuentes y naranjos, y las salas decoradas con yeserías y artesonados que inspiraron Juego de Tronos.</p>
+        <div class="audio-actions">
+          <button class="btn btn-play" id="play4" onclick="toggleAudio('audio4', 'play4', 'status4')" aria-label="Reproducir audio: Patios y Salas Reales, 9 minutos">
+            ▶️ Escuchar
+          </button>
+          <button class="btn btn-download" onclick="downloadFile('audios/patios_alcazar.mp3', 'patios_alcazar_seviaccesible.mp3')" aria-label="Descargar audio: Patios y Salas Reales">
+            📥 Descargar
+          </button>
+        </div>
+        <div class="audio-status" id="status4" aria-live="polite" aria-atomic="true">Listo para reproducir</div>
+        <audio id="audio4" preload="metadata"><source src="audios/patios_alcazar.mp3" type="audio/mpeg" /></audio>
+      </div>
+
+      <div class="category" aria-labelledby="jardines-alcazar">
+        <h3 id="jardines-alcazar">Jardines del Alcázar</h3>
+        <p>Más de 50.000 metros cuadrados de jardines con especies exóticas, laberintos verdes y el sonido constante del agua.</p>
+        <div class="audio-actions">
+          <button class="btn btn-play" id="play5" onclick="toggleAudio('audio5', 'play5', 'status5')" aria-label="Reproducir audio: Jardines del Alcázar, 8 minutos">
+            ▶️ Escuchar
+          </button>
+          <button class="btn btn-download" onclick="downloadFile('audios/jardines_alcazar.mp3', 'jardines_alcazar_seviaccesible.mp3')" aria-label="Descargar audio: Jardines del Alcázar">
+            📥 Descargar
+          </button>
+        </div>
+        <div class="audio-status" id="status5" aria-live="polite" aria-atomic="true">Listo para reproducir</div>
+        <audio id="audio5" preload="metadata"><source src="audios/jardines_alcazar.mp3" type="audio/mpeg" /></audio>
+      </div>
+    </section>
+
+    <section aria-labelledby="parque-maria-luisa">
+      <h2 id="parque-maria-luisa">Parque de María Luisa</h2>
+      <p>El pulmón verde de Sevilla, con plazas monumentales, fuentes danzantes y senderos sombreados por palmeras y naranjos.</p>
+      
+      <div class="category" aria-labelledby="plaza-espana">
+        <h3 id="plaza-espana">Plaza de España</h3>
+        <p>La joya arquitectónica del parque, con su banco de azulejos que representa todas las provincias de España y el sonido de sus botes en el canal.</p>
+        <div class="audio-actions">
+          <button class="btn btn-play" id="play6" onclick="toggleAudio('audio6', 'play6', 'status6')" aria-label="Reproducir audio: Plaza de España, 10 minutos">
+            ▶️ Escuchar
+          </button>
+          <button class="btn btn-download" onclick="downloadFile('audios/plaza_espana.mp3', 'plaza_espana_seviaccesible.mp3')" aria-label="Descargar audio: Plaza de España">
+            📥 Descargar
+          </button>
+        </div>
+        <div class="audio-status" id="status6" aria-live="polite" aria-atomic="true">Listo para reproducir</div>
+        <audio id="audio6" preload="metadata"><source src="audios/plaza_espana.mp3" type="audio/mpeg" /></audio>
+      </div>
+
+      <div class="category" aria-labelledby="jardines-maria-luisa">
+        <h3 id="jardines-maria-luisa">Jardines del Parque</h3>
+        <p>Los senderos, fuentes y glorietaes del parque, con el canto de los pájaros y el murmullo de las fuentes como banda sonora constante.</p>
+        <div class="audio-actions">
+          <button class="btn btn-play" id="play7" onclick="toggleAudio('audio7', 'play7', 'status7')" aria-label="Reproducir audio: Jardines del Parque María Luisa, 7 minutos">
+            ▶️ Escuchar
+          </button>
+          <button class="btn btn-download" onclick="downloadFile('audios/jardines_maria_luisa.mp3', 'jardines_maria_luisa_seviaccesible.mp3')" aria-label="Descargar audio: Jardines del Parque María Luisa">
+            📥 Descargar
+          </button>
+        </div>
+        <div class="audio-status" id="status7" aria-live="polite" aria-atomic="true">Listo para reproducir</div>
+        <audio id="audio7" preload="metadata"><source src="audios/jardines_maria_luisa.mp3" type="audio/mpeg" /></audio>
+      </div>
+    </section>
+
+    <section aria-labelledby="flamenco-sevilla">
+      <h2 id="flamenco-sevilla">Flamenco en Sevilla</h2>
+      <p>La cuna del flamenco, donde cada barrio tiene su propio estilo y cada cante cuenta una historia de pasión y duende.</p>
+      
+      <div class="category" aria-labelledby="tablaos-flamenco">
+        <h3 id="tablaos-flamenco">Tablaos Históricos</h3>
+        <p>Descubre los tablaos más emblemáticos de Sevilla, donde el zapateado, el cante y la guitarra se funden en una experiencia emocional única.</p>
+        <div class="audio-actions">
+          <button class="btn btn-play" id="play8" onclick="toggleAudio('audio8', 'play8', 'status8')" aria-label="Reproducir audio: Tablaos Históricos de Sevilla, 8 minutos">
+            ▶️ Escuchar
+          </button>
+          <button class="btn btn-download" onclick="downloadFile('audios/tablao_flamenco.mp3', 'tablao_flamenco_seviaccesible.mp3')" aria-label="Descargar audio: Tablaos Históricos de Sevilla">
+            📥 Descargar
+          </button>
+        </div>
+        <div class="audio-status" id="status8" aria-live="polite" aria-atomic="true">Listo para reproducir</div>
+        <audio id="audio8" preload="metadata"><source src="audios/tablao_flamenco.mp3" type="audio/mpeg" /></audio>
+      </div>
+
+      <div class="category" aria-labelledby="barrios-flamenco">
+        <h3 id="barrios-flamenco">Barrios Flamencos</h3>
+        <p>Triana, Macarena y La Alameda: los barrios donde nació y vive el flamenco auténtico, con sus patios, plazas y peñas.</p>
+        <div class="audio-actions">
+          <button class="btn btn-play" id="play9" onclick="toggleAudio('audio9', 'play9', 'status9')" aria-label="Reproducir audio: Barrios Flamencos de Sevilla, 9 minutos">
+            ▶️ Escuchar
+          </button>
+          <button class="btn btn-download" onclick="downloadFile('audios/barrios_flamenco.mp3', 'barrios_flamenco_seviaccesible.mp3')" aria-label="Descargar audio: Barrios Flamencos de Sevilla">
+            📥 Descargar
+          </button>
+        </div>
+        <div class="audio-status" id="status9" aria-live="polite" aria-atomic="true">Listo para reproducir</div>
+        <audio id="audio9" preload="metadata"><source src="audios/barrios_flamenco.mp3" type="audio/mpeg" /></audio>
+      </div>
     </section>
 
     <section aria-labelledby="ajustes">
@@ -369,7 +445,7 @@
   </main>
 
   <footer>
-    <p>© 2025 SeviAccesible</p>
+    <p>© 2026 SeviAccesible</p>
     <p>Proyecto sin ánimo de lucro. Totalmente accesible, offline y respetuoso con tu privacidad.</p>
     <p>Desarrollado con ❤️ para la comunidad ciega y con baja visión.</p>
   </footer>
@@ -387,7 +463,7 @@
       if (currentAudio && currentAudio !== audio) {
         currentAudio.pause();
         if (currentButton) {
-          currentButton.textContent = '▶️ Reproducir';
+          currentButton.textContent = '▶️ Escuchar';
           currentButton.classList.replace('btn-pause', 'btn-play');
         }
         if (currentStatus) {
@@ -402,7 +478,7 @@
         status.textContent = 'Reproduciendo...';
       } else {
         audio.pause();
-        btn.textContent = '▶️ Reproducir';
+        btn.textContent = '▶️ Escuchar';
         btn.classList.replace('btn-pause', 'btn-play');
         status.textContent = 'Pausado';
       }
